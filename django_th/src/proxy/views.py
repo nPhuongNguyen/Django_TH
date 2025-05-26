@@ -3,8 +3,23 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .graphql import create_product, get_graphql_headers, handle_graphql_errors, send_graphql_request
 from django.views.decorators.http import require_POST
-@csrf_exempt
-@require_POST
+from rest_framework.decorators import api_view, throttle_classes
+from rest_framework.throttling import UserRateThrottle
+# | Tên                      | Tác dụng chính                                                                |
+# | ------------------------ | ----------------------------------------------------------------------------- |
+# | `renderer_classes`       | Quy định **định dạng dữ liệu trả về** từ API (JSON, HTML, XML...)             |
+# | `parser_classes`         | Quy định **định dạng dữ liệu mà API nhận vào** (JSON, multipart/form-data...) |
+# | `authentication_classes` | Xác định **cách kiểm tra danh tính (login)** của người dùng                   |
+# | `throttle_classes`       | Giới hạn **tần suất gọi API** của người dùng (chống spam, lạm dụng)           |
+# | `permission_classes`     | Quy định **quyền truy cập** API (ai được phép, ai bị từ chối)                 |
+
+
+# class OncePerDayUserThrottle(UserRateThrottle):
+#         rate = '2/minute' 
+# @csrf_exempt
+# @require_POST
+@api_view(['GET','POST'])
+# @throttle_classes([OncePerDayUserThrottle])
 def proxy_api(request):
     try:
         graphql_query, graphql_variables = create_product(request.body)

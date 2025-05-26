@@ -13,6 +13,7 @@ dependencies = [
     "mysqlclient (>=2.2.7,<3.0.0)",
     "djangorestframework (>=3.16.0,<4.0.0)",
     "drf-yasg (>=1.21.10,<2.0.0)",
+    "djangorestframework-xml (>=2.0.0,<3.0.0)",
 ]
 
 [tool.poetry]
