@@ -51,12 +51,6 @@ class ProductService(product_pb2_grpc.ProductServiceServicer):
             if not product:
                 raise Exception("Product not found in response")
 
-            # Xử lý pricing an toàn
-            try:
-                price = product["pricing"]["priceRange"]["start"]["gross"]["amount"]
-            except (KeyError, TypeError):
-                price = 0.0  # Giá trị mặc định nếu không có pricing
-
             return product_pb2.GetProductResponse(
                 id=product["id"],
                 name=product["name"],

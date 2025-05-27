@@ -1,10 +1,14 @@
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+
+import product_pb2, product_pb2_grpc
 from .graphql import create_product, get_graphql_headers, handle_graphql_errors, send_graphql_request
 from django.views.decorators.http import require_POST
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import UserRateThrottle
+import grpc 
 # | Tên                      | Tác dụng chính                                                                |
 # | ------------------------ | ----------------------------------------------------------------------------- |
 # | `renderer_classes`       | Quy định **định dạng dữ liệu trả về** từ API (JSON, HTML, XML...)             |
@@ -41,3 +45,24 @@ def proxy_api(request):
     product_data = response_data.get("data", {}).get("productCreate", {})
     return JsonResponse(product_data.get("product", {}), status=201)
 
+@api_view(['GET'])
+def get_product(request, product_id):
+    try:
+        # Kết nối tới gRPC server
+        channel = grpc.insecure_channel('localhost:50051')
+        stub = product_pb2_grpc.ProductServiceStub(channel)
+        
+        # Gọi gRPC
+        response = stub.GetProduct(product_pb2.GetProductRequest(id=product_id))
+        
+        return Response({
+            'id': response.id,
+            'name': response.name,
+            'price': response.price
+        })
+    
+    except grpc.RpcError as e:
+        return Response(
+            {'error': f'gRPC error: {e.details()}'},
+            status=500
+        )
