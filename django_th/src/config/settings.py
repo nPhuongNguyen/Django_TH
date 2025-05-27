@@ -122,6 +122,9 @@ REST_FRAMEWORK = {
     ],
 }
 
+SALEOR_GRAPHQL_URL = "http://localhost:8000/graphql/"
+SALEOR_API_TOKEN = "g"
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 

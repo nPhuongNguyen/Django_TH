@@ -21,7 +21,21 @@ poetry run python manage.py migrate
 poetry add mysqlclient //Mysql
 poetry add psycopg2-binary //PostgreSqlSql
 <!-- Chạy lệnh inspectdb  -->
-poetry run python manage.py inspectdb > your_app/models.py
+poetry run python manage.py inspectdb > your_app/models.
+
+
+
+
+
+
+# Install Django and Django gRPC framework
+pip install django
+pip install djangorestframework
+pip install grpcio
+pip install grpcio-tools
+
+python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/product.proto
+poetry run python -m src.grpc_client
 
 
 

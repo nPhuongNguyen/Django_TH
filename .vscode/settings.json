@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./django_th/src/product_pb2_",
+        "./django_th/src/product_pb2_"
+    ]
+}
